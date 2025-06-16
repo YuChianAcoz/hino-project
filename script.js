@@ -57,6 +57,8 @@ $(document).ready(function () {
       $yearSelector.append(`<option value="${year}">${year}</option>`);
     });
 
+    $yearSelector.find('option[value=""][disabled][hidden]').css('display', 'none');
+    
     $yearSelector.off("change").on("change", function () {
       var year = $(this).val();
       populateQuarterSelector(year);
