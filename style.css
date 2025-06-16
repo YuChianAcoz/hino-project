@@ -89,6 +89,9 @@ header {
   object-fit: cover;
   display: block;
 }
+.year-selector option[disabled][hidden] {
+  display: none;
+}
 
 @supports (-webkit-touch-callout: none) {
   .year-selector {
