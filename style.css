@@ -53,7 +53,8 @@ header {
   cursor: pointer;
   font-size: 16px;
   position: relative;
-  top: 2px;
+  top: 0px;
+  transform: translateY(2px);
 }
 .year-selector:focus {
   outline: none;
