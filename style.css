@@ -317,6 +317,7 @@ footer .footer-menu ul li a{
 .modal-content-info {
   overflow-y: auto;
   max-height: 70vh;
+  height: 70%;
   padding: 8px;
   text-align: center;
 }
