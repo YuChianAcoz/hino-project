@@ -307,7 +307,7 @@ footer .footer-menu ul li a{
 .modal-content {
   background: white;
   border-radius: 8px;
-  max-width: 400px;
+  width: 400px;
   max-width: 80%;
   max-height: 90vh;
   position: relative;
