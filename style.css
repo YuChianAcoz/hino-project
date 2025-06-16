@@ -1,0 +1,356 @@
+/* ALL */
+* {
+  box-sizing: border-box;
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+:root {
+  --background-color: #002437;
+  --hover-color: #f4d046;
+  --text-color: #fffff;
+  --breadcrumb-main-color: #595757;
+  --red-color: #d71523;
+}
+
+
+
+/* Header */
+header {
+  color: var(--text-color);
+}
+.header-bar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 10px 16px;
+  background-color: var(--background-color);
+  color: #ffffff;
+}
+.current-winner{
+  cursor: pointer;
+  font-size: 16px;
+}
+.current-winner:focus{
+  color: var(--hover-color);
+}
+.select-wrapper {
+  position: relative;
+  display: inline-block;
+}
+.highlight{
+  color: var(--red-color);
+}
+.year-selector {
+  padding-right: 20px;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  position: relative;
+  top: 2px;
+}
+.year-selector:focus {
+  outline: none;
+  box-shadow: none;
+  color: var(--hover-color);
+}
+.year-selector option {
+  text-align: center;
+  padding: 6px 0;
+  font-family: inherit;
+  font-size: 16px;
+  color: var(--text-color);
+}
+.select-wrapper:has(.year-selector:focus)::after {
+  color: var(--hover-color);
+}
+.header-banner {
+  display: block;
+  max-width: 1048px;
+  margin: auto;
+  overflow: hidden;
+}
+.header-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+@supports (-webkit-touch-callout: none) {
+  .year-selector {
+    font-size: 14px;
+  }
+}
+
+
+
+/* Content */
+.content-container {
+  max-width: 1200px;
+  margin: 16px auto;
+  padding: 0 16px;
+  max-width: 1048px; 
+}
+.breadcrumb {
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: var(--breadcrumb-main-color);
+}
+.season-select {
+  margin-bottom: 16px;
+  padding: 4px 8px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.ambassador-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+}
+.card {
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+}
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.card img {
+  width: 100%;
+  border-radius: 6px;
+  object-fit: cover;
+  aspect-ratio: 4 / 4;
+}
+.card .info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin: 12px auto;
+}
+.card .name {
+  font-size: 18px;
+}
+.card .dept {
+  font-size: 14px;
+}
+
+
+
+
+/* BTN for Store & Contact */
+.btn-link a {
+    width: calc(49.9999% - 2px);
+    margin-right: 2px;
+    cursor: pointer;
+    font-size: 20px;
+    letter-spacing: 2px;
+    font-weight: 500;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    background-color: #f4f4f4;
+    color: #595757;
+    padding: 50px 0px;
+    text-decoration: none;
+}
+.btn-link a:hover{
+  background-color: #dcdddd;
+}
+.btn-link a:last-child {
+    margin-right: 0px;
+    margin-left: -5px;
+}
+.btn-link a img {
+  vertical-align: middle;
+  margin-right: 15px;
+}
+
+
+
+
+/* Footer */
+footer {
+    background: #232323;
+    border-bottom: 9px solid #D71718;
+}
+footer .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+footer .footer-info {
+    width: 50%;
+}
+footer .footer-info .logo {
+    display: block;
+    margin-bottom: 15px;
+}
+footer .footer-menu {
+    width: 50%;
+}
+footer .footer-info .footer-copy {
+    font-size: 14px;
+    color: #fff;
+    line-height: 1.7;
+}
+footer .footer-menu {
+    width: 50%;
+}
+
+footer .footer-menu ul {
+    margin: auto;
+    justify-content: end;
+    display: flex;
+    flex-wrap: nowrap;
+}
+ol, ul {
+    list-style: none;
+        padding: 0;
+}
+footer .footer-menu ul li {
+    position: relative;
+        color: #fff;
+}
+
+footer .footer-menu ul li a{
+    text-decoration: none;
+        color: #fff;
+}
+
+.footer-menu ul li:not(:last-child)::after {
+  content: "┃";
+  color: #fff;
+}
+
+@media screen and (max-width: 820px) {
+    .btn-link a {
+      font-size: 15px;
+      padding: 20px 0px;
+    }
+
+    .btn-link a img {
+      width: 30px;
+      margin-right: 8px
+    }
+}
+
+@media screen and (max-width: 768px) {
+   .ambassador-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  footer .footer-inner{
+  flex-direction: column;
+  }
+  footer .footer-inner .footer-info{
+    width: 100%;
+  }
+  footer .footer-inner .footer-info .footer-copy{
+      font-size: 12px;
+  }
+  footer .footer-inner .footer-menu{
+      width: 100%;
+      font-size: 12px;
+  }
+}
+
+/* Modal-Card */
+.close-btn {
+  position: absolute;
+  top: -35px;
+  right: -12px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+}
+.close-btn:hover {
+  transform: scale(1.1);
+}
+
+.modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.modal.hidden {
+  display: none;
+}
+.modal-content {
+  background: white;
+  border-radius: 8px;
+  max-width: 400px;
+  max-height: 90vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.modal-content-info {
+  overflow-y: auto;
+  max-height: 70vh;
+  padding: 8px;
+  text-align: center;
+}
+.modal-content-info h3 {
+  color: var(--red-color);
+  margin: 0px;
+  font-size: 14px;
+}
+.modal-content-info p {
+  margin: 8px;
+  font-size: 12px;
+}
+
+.modal-content img {
+  width: 100%;
+  border-radius: 10px;
+}
+.modal-footer {
+  border-radius: 0px 0px 10px 10px;
+  flex-shrink: 0;
+  background-color: #f4f4f4;
+}
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  background-color: #d9d9d9;
+  padding: 16px;
+  border-radius: 0px 0px 8px 8px;
+}
+.icon-btn {
+  width: 41px;
+  height: 41px;
+  border-radius: 34px;
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
+.icon-btn:hover {
+  transform: scale(1.1);
+}
+.icon-btn.line {
+  background-image: url('assets/line.png');
+}
+.icon-btn.fb {
+  background-image: url('assets/facebook.png');
+}
+.icon-btn.phone {
+  background-image: url('assets/phone.png');
+}
