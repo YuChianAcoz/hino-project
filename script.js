@@ -60,7 +60,7 @@ $(document).ready(function () {
 
     placeholderOption.hide();
 
-    $.each(Object.keys(data).sort(), function (_, year) {
+    $.each(Object.keys(data).sort().reverse(), function (_, year) {
       $yearSelector.append(`<option value="${year}">${year}</option>`);
     });
 
@@ -76,7 +76,7 @@ $(document).ready(function () {
     $quarterSelector.empty();
 
      if (year === "2023" ||　year === "2024") {
-      window.location.href = "https://www.hino.com.tw/hinohero";
+      window.open("https://www.hino.com.tw/hinohero", "_blank");
       return;
     }
 
