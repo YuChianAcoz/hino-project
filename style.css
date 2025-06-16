@@ -32,8 +32,12 @@ header {
   color: #ffffff;
 }
 .current-winner{
-  cursor: pointer;
   font-size: 16px;
+  line-height: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
 }
 .current-winner:focus{
   color: var(--hover-color);
@@ -53,8 +57,10 @@ header {
   cursor: pointer;
   font-size: 16px;
   position: relative;
-  top: 0px;
-  transform: translateY(2px);
+  font-family: inherit;
+  height: 32px;
+  line-height: 1.2;
+  vertical-align: middle;
 }
 .year-selector:focus {
   outline: none;
@@ -86,7 +92,7 @@ header {
 
 @supports (-webkit-touch-callout: none) {
   .year-selector {
-    font-size: 14px;
+    font-size: 16x;
   }
 }
 
