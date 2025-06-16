@@ -53,12 +53,17 @@ $(document).ready(function () {
 
   function populateYearSelector(selectedYear) {
     var $yearSelector = $("#yearSelector");
+    $yearSelector.empty();
+
+    var placeholderOption = $('<option value="" disabled selected class="placeholder-option">歷屆得獎者</option>');
+    $yearSelector.append(placeholderOption);
+
+    placeholderOption.hide();
+
     $.each(Object.keys(data).sort(), function (_, year) {
       $yearSelector.append(`<option value="${year}">${year}</option>`);
     });
 
-    $yearSelector.find('option[value=""][disabled][hidden]').css('display', 'none');
-    
     $yearSelector.off("change").on("change", function () {
       var year = $(this).val();
       populateQuarterSelector(year);
