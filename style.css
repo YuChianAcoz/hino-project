@@ -38,6 +38,7 @@ header {
   display: inline-flex;
   align-items: center;
   cursor: pointer;
+  margin-left: 3px;
 }
 .current-winner:focus{
   color: var(--hover-color);
