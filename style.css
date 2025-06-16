@@ -31,7 +31,7 @@ header {
   background-color: var(--background-color);
   color: #ffffff;
 }
-.current-winner{
+.current-winner, .select-divider{
   font-size: 16px;
   line-height: 32px;
   height: 32px;
