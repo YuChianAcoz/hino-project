@@ -42,6 +42,7 @@ header {
 }
 .current-winner:focus{
   color: var(--hover-color);
+  font-weight: 600;
 }
 .select-wrapper {
   position: relative;
@@ -67,6 +68,7 @@ header {
   outline: none;
   box-shadow: none;
   color: var(--hover-color);
+  font-weight: 600;
 }
 .year-selector option {
   text-align: center;
