@@ -50,18 +50,30 @@ $(document).ready(function () {
       }
     });
 
-     $("#yearSelector").off("change").on("change", function () {
-      var year = $(this).val();
+    //  $("#yearSelector").off("change").on("change", function () {
+    //   var year = $(this).val();
 
+    //   if (year === "2023" || year === "2024") {
+    //     window.open("https://www.hino.com.tw/hinohero", "_blank");
+    //     this.selectedIndex = 0;
+    //     return;
+    //   }
+
+    //   populateQuarterSelector(year);
+    //   this.selectedIndex = 0;
+    // });
+
+    $("#yearSelector").off("change").on("change", function () {
+      const year = $(this).val();
       if (year === "2023" || year === "2024") {
         window.open("https://www.hino.com.tw/hinohero", "_blank");
-        this.selectedIndex = 0;
-        return;
+      } else {
+        populateQuarterSelector(year);
       }
 
-      populateQuarterSelector(year);
-      this.selectedIndex = 0;
+      this.selectedIndex = 0; // 重設為 placeholder，避免選不動
     });
+
   });
 
   function populateYearSelector(selectedYear) {
