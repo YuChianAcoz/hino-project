@@ -61,21 +61,21 @@ $(document).ready(function () {
     placeholderOption.hide();
 
     $.each(Object.keys(data).sort().reverse(), function (_, year) {
-      $yearSelector.append(`<option value="${year}">${year}</option>`);
+      $yearSelector.append(`<option value="https://www.hino.com.tw/hinohero">${year}</option>`);
     });
 
-    $yearSelector.off("change").on("change", function () {
-      var year = $(this).val();
+    // $yearSelector.off("change").on("change", function () {
+    //   var year = $(this).val();
 
-      if (year === "2023" || year === "2024") {
-        OpenBeforeData();
-        this.selectedIndex = 0;
-        return;
-      }
+    //   if (year === "2023" || year === "2024") {
+    //     OpenBeforeData();
+    //     this.selectedIndex = 0;
+    //     return;
+    //   }
 
-      populateQuarterSelector(year);
-      this.selectedIndex = 0;
-    });
+    //   populateQuarterSelector(year);
+    //   this.selectedIndex = 0;
+    // });
   }
 
   function OpenBeforeData(){
