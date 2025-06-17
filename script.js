@@ -79,7 +79,7 @@ $(document).ready(function () {
   }
 
   function OpenBeforeData(){
-    window.open("https://www.hino.com.tw/hinohero", "_blank");
+    $("#beforeUrl")[0].click();
   }
 
   function populateQuarterSelector(year, preselectQuarter = "Q1") {
