@@ -369,3 +369,48 @@ footer .footer-menu ul li a{
 .icon-btn.phone {
   background-image: url('assets/phone.png');
 }
+
+
+
+
+.custom-select-wrapper {
+  position: relative;
+  display: inline-block;
+}
+.custom-select {
+  padding: 4px 8px;
+  background-color: #002437;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  height: 32px;
+  line-height: 32px;
+  border-radius: 4px;
+}
+.custom-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  z-index: 100;
+  width: 100%;
+}
+.custom-options div a {
+  display: block;
+  padding: 8px 12px;
+  text-decoration: none;
+  color: #333;
+}
+.custom-options div:hover {
+  background-color: #f4f4f4;
+}
+
+
+
+
+
+
+
+
+
