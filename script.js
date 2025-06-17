@@ -68,7 +68,7 @@ $(document).ready(function () {
       var year = $(this).val();
 
       if (year === "2023" || year === "2024") {
-        $("#beforeUrl")[0].click();
+        OpenBeforeData();
         this.selectedIndex = 0;
         return;
       }
@@ -78,7 +78,9 @@ $(document).ready(function () {
     });
   }
 
-  
+  function OpenBeforeData(){
+    window.open("https://www.hino.com.tw/hinohero", "_blank");
+  }
 
   function populateQuarterSelector(year, preselectQuarter = "Q1") {
     var $quarterSelector = $("#seasonSelector");
