@@ -66,19 +66,23 @@ $(document).ready(function () {
 
     $yearSelector.off("change").on("change", function () {
       var year = $(this).val();
+
+      if (year === "2023" ||　year === "2024") {
+      window.open("https://www.hino.com.tw/hinohero", "_blank");
+      this.selectedIndex = 0;
+      return;
+    }
+
       populateQuarterSelector(year);
       this.selectedIndex = 0;
     });
   }
 
+  
+
   function populateQuarterSelector(year, preselectQuarter = "Q1") {
     var $quarterSelector = $("#seasonSelector");
     $quarterSelector.empty();
-
-     if (year === "2023" ||　year === "2024") {
-      window.open("https://www.hino.com.tw/hinohero", "_blank");
-      return;
-    }
 
     $.each(quarterMap, function (quarter, months) {
       var hasData = months.some(month => data[year][month]);
