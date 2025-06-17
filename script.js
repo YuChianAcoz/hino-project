@@ -68,11 +68,9 @@ $(document).ready(function () {
       var year = $(this).val();
 
       if (year === "2023" || year === "2024") {
-      let newWin = window.open("https://www.hino.com.tw/hinohero", "_blank");
-      if (!newWin || newWin.closed || typeof newWin.closed == 'undefined') {
-        window.location.href = "https://www.hino.com.tw/hinohero";
-      }
-      return;
+        $("#beforeUrl")[0].click();
+        this.selectedIndex = 0;
+        return;
       }
 
       populateQuarterSelector(year);
