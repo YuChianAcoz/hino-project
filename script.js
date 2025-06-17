@@ -49,6 +49,19 @@ $(document).ready(function () {
         alert("當年度目前尚無資料");
       }
     });
+
+     $("#yearSelector").off("change").on("change", function () {
+      var year = $(this).val();
+
+      if (year === "2023" || year === "2024") {
+        window.open("https://www.hino.com.tw/hinohero", "_blank");
+        this.selectedIndex = 0;
+        return;
+      }
+
+      populateQuarterSelector(year);
+      this.selectedIndex = 0;
+    });
   });
 
   function populateYearSelector(selectedYear) {
@@ -61,7 +74,7 @@ $(document).ready(function () {
     placeholderOption.hide();
 
     $.each(Object.keys(data).sort().reverse(), function (_, year) {
-      $yearSelector.append(`<option value="https://www.hino.com.tw/hinohero">${year}</option>`);
+      $yearSelector.append(`<option value="${year}">${year}</option>`);
     });
 
     // $yearSelector.off("change").on("change", function () {
@@ -76,10 +89,6 @@ $(document).ready(function () {
     //   populateQuarterSelector(year);
     //   this.selectedIndex = 0;
     // });
-  }
-
-  function OpenBeforeData(){
-    $("#beforeUrl")[0].click();
   }
 
   function populateQuarterSelector(year, preselectQuarter = "Q1") {
