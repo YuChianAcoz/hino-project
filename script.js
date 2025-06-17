@@ -1,97 +1,160 @@
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>微笑大使畫面樣板</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-    <header class="header">
-        <div class="header-bar">
-            <span id="current" class="current-winner" tabindex="0">當年度得獎者</span>
-            <span class="select-divider">┃</span>
-            <div class="select-wrapper">
-                <select id="yearSelector" class="year-selector">
-                </select>
-            </div>
-            
-        </div>
-        <div class="header-banner">
-            <img src="assets/Banner.gif" width="1048" height="500"  alt="微笑大使 Banner" class="banner" />
-        </div>
-    </header>
+$(document).ready(function () {
+  let data = {};
+  var quarterMap = {
+    Q1: ["01", "02", "03"],
+    Q2: ["04", "05", "06"],
+    Q3: ["07", "08", "09"],
+    Q4: ["10", "11", "12"]
+  };
+  var quarterNames = {
+    Q1: "一",
+    Q2: "二",
+    Q3: "三",
+    Q4: "四"
+  };
 
+  $.getJSON("data.json", function (json) {
+    data = json["微笑大使"];
 
-    <section class="content-container">
-        <div class="breadcrumb" id="breadcrumb"></div>
-        <select id="seasonSelector" class="season-select"></select>
-        <div class="ambassador-grid" id="ambassadorGrid">
+    var now = new Date();
+    var currentYear = now.getFullYear().toString();
+    var currentMonth = now.getMonth() + 1;
 
-        </div>
-    </section>
+    let currentQuarter = "Q1";
+    if (currentMonth >= 4 && currentMonth <= 6) currentQuarter = "Q2";
+    else if (currentMonth >= 7 && currentMonth <= 9) currentQuarter = "Q3";
+    else if (currentMonth >= 10) currentQuarter = "Q4";
 
-    <div class="btn-link"> 
-        <a class="btn-link-store" href="https://www.hino.com.tw/store.aspx" target="_blank">
-            <img src="assets/store.png" alt="據點查詢">據點查詢
-        </a> 
-        <a class="btn-link-contact" href="https://www.hino.com.tw/contact.aspx" target="_blank">
-            <img src="assets/contact.png" alt="預約回廠">預約回廠
-        </a>
-    </div>
-    <footer>
-        <div class="footer-inner">
-            <div class="footer-info">
-                <div class="logo">
-                    <img src="assets/footer-logo.png" alt="全家logo">    
-                </div>
+    if (data[currentYear]) {
+      populateYearSelector(currentYear);
+      populateQuarterSelector(currentYear, currentQuarter);
+    } else {
+      var firstYear = Object.keys(data).sort().reverse()[0];
+      populateYearSelector(firstYear);
+      populateQuarterSelector(firstYear, "Q1");
+    }
 
-                <div class="footer-copy">
-                    Copyright © 2017. Hotai Motor Co., Ltd. All rights reserved
-                    <br>
-                    總代理：和泰汽車股份有限公司
-                </div>
-            </div>
-            <div class="footer-menu">
-                <ul>
-                    <li><a href="https://www.hino.com.tw/download.aspx#letter">契約書下載</a></li>
-                    <li><a href="https://www.hino.com.tw/policy.aspx">隱私權聲明</a></li>
-                    <li>客服專線 0800-522-567</li>
-                </ul>
-            </div>
-        </div>
-    </footer>
+    $("#current").on("click", function () {
+      var nowYear = new Date().getFullYear().toString();
+      var nowMonth = new Date().getMonth() + 1;
 
-<div id="modal" class="modal hidden">
-  <div class="modal-content">
-    
-    <div class="modal-content-info">
-      <span class="close-btn" onclick="closeModal()">
-        <img src="assets/close-icon.png" alt="closeBtn">
-      </span>
-      <img id="modal-photo" src="" alt="">
-      <h3>自我介紹</h3>
-      <p id="modal-intro"></p>
-      <h3>服務宣言</h3>
-      <p id="modal-promise"></p>
-      <h3>上班前要做的事？</h3>
-      <p id="modal-recommend"></p>
-    </div>
+      var nowQuarter = "Q1";
+      if (nowMonth >= 4 && nowMonth <= 6) nowQuarter = "Q2";
+      else if (nowMonth >= 7 && nowMonth <= 9) nowQuarter = "Q3";
+      else if (nowMonth >= 10) nowQuarter = "Q4";
 
-    <div class="modal-footer">
-      <div class="social-links">
-        <a id="modal-fb" href="#" target="_blank" class="icon-btn fb"></a>
-        <a id="modal-line" href="#" target="_blank" class="icon-btn line"></a>
-        <a id="modal-phone" href="#" target="_blank" class="icon-btn phone"></a>
-      </div>
-    </div>
+      if (data[nowYear]) {
+        populateQuarterSelector(nowYear, nowQuarter);
+      } else {
+        alert("當年度目前尚無資料");
+      }
+    });
+  });
 
-  </div>
-</div>
+  function populateYearSelector(selectedYear) {
+    var $yearSelector = $("#yearSelector");
+    $yearSelector.empty();
 
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="script.js"></script>
- 
-</body>
+    var placeholderOption = $('<option value="" disabled selected class="placeholder-option">歷屆得獎者</option>');
+    $yearSelector.append(placeholderOption);
 
-</html>
+    placeholderOption.hide();
+
+    $.each(Object.keys(data).sort().reverse(), function (_, year) {
+      $yearSelector.append(`<option value="${year}">${year}</option>`);
+    });
+
+    $yearSelector.off("change").on("change", function () {
+      var year = $(this).val();
+
+       if (year === "2023" || year === "2024") {
+          var url = "https://www.hino.com.tw/hinohero";
+
+          // 嘗試開新分頁
+          var newWindow = window.open(url, "_blank");
+
+          // 如果被阻擋或未成功開啟，就直接導向
+          if (!newWindow || newWindow.closed || typeof newWindow.closed === "undefined") {
+            window.location.href = url;
+          }
+
+          // 重置下拉選單狀態
+          $(this).prop('selectedIndex', 0);
+          return;
+        }
+
+      populateQuarterSelector(year);
+      this.selectedIndex = 0;
+    });
+  }
+
+  function populateQuarterSelector(year, preselectQuarter = "Q1") {
+    var $quarterSelector = $("#seasonSelector");
+    $quarterSelector.empty();
+
+    $.each(quarterMap, function (quarter, months) {
+      var hasData = months.some(month => data[year][month]);
+      if (hasData) {
+        var isSelected = quarter === preselectQuarter ? "selected" : "";
+        $quarterSelector.append(`<option value="${quarter}" ${isSelected}>${year}年第${quarterNames[quarter]}次微笑大使</option>`);
+      }
+    });
+
+    updateContent(year, preselectQuarter);
+
+      $quarterSelector.off("change").on("change", function () {
+      updateContent(year, $(this).val());
+    });
+  }
+
+  function updateContent(year, quarter) {
+    var nowYear = new Date().getFullYear().toString();
+    var $breadcrumb = $("#breadcrumb");
+    var $grid = $("#ambassadorGrid");
+
+    if (year === nowYear) {
+      $breadcrumb.html(`微笑大使 › <span class="highlight">當年度得獎者</span>`);
+    }
+    else {
+      $breadcrumb.html(`微笑大使 › <span class="highlight">當年度得獎者 › ${year}</span>`);
+    }
+
+    $grid.empty();
+
+    var months = quarterMap[quarter];
+    months.forEach(month => {
+      var list = data[year][month] || [];
+      list.forEach(person => {
+        var $card = $("<div class='card'></div>").html(`
+          <img src="${person.photo}" alt="${person.name}" />
+          <div class="info-row">
+            <div class="name">${person.name}</div>
+            <div class="dept">${person.dept}</div>
+          </div>
+        `);
+
+        $card.on("click", function () {
+          openModal(person);
+        });
+
+        $grid.append($card);
+      });
+    });
+  }
+
+  function openModal(person) {
+    $("#modal-photo").attr("src", person.photo);
+    $("#modal-intro").text(person.intro || "尚無介紹");
+    $("#modal-promise").text(person.promise || "尚無介紹");
+    $("#modal-recommend").text(person.recommend || "尚無介紹");
+    $("#modal-line").attr("href", person.line || "#");
+    $("#modal-fb").attr("href", person.fb || "#");
+    $("#modal-phone").attr("href", person.phone || "#");
+
+    $("#modal").removeClass("hidden");
+  }
+
+  window.closeModal = function () {
+    $("#modal").addClass("hidden");
+  };
+});
