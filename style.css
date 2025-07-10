@@ -315,6 +315,7 @@ footer .footer-menu ul li a{
   flex-direction: column;
 }
 .modal-content-info {
+  position: relative;
   overflow-y: auto;
   max-height: 70vh;
   height: 70%;
@@ -324,13 +325,29 @@ footer .footer-menu ul li a{
 .modal-content-info h3 {
   color: var(--red-color);
   margin: 0px;
-  font-size: 14px;
+  font-size: 16px;
 }
 .modal-content-info p {
   margin: 8px;
-  font-size: 12px;
+  font-size: 14px;
 }
-
+.modal-intro{
+  position: absolute;
+  right: 42px;
+  top: 100px;
+}
+.modal-content-info .modal-intro h3{
+  font-size: 28px;
+  color: #232323;
+}
+.modal-content-info .modal-intro .modal-intro-dept{
+  font-size: 10px;
+  background-color: #232323;
+  color: #fff;
+  border-radius: 10px;
+  margin: auto;
+  width: 65px;
+}
 .modal-content img {
   width: 100%;
   border-radius: 10px;
@@ -341,7 +358,8 @@ footer .footer-menu ul li a{
   background-color: #f4f4f4;
 }
 .social-links {
-  display: flex;
+  /* display: flex; --> next Open*/
+  display: none;
   justify-content: center;
   gap: 10px;
   background-color: #d9d9d9;
@@ -369,11 +387,3 @@ footer .footer-menu ul li a{
 .icon-btn.phone {
   background-image: url('assets/phone.png');
 }
-
-
-
-
-
-
-
-
