@@ -1,5 +1,9 @@
 $(document).ready(function () {
-  let data = {};
+  var data = {};
+  var now = new Date();
+  var currentYear = now.getFullYear().toString();
+  var currentMonth = now.getMonth() + 1;
+
   var quarterMap = {
     Q1: ["01", "02", "03"],
     Q2: ["04", "05", "06"],
@@ -16,11 +20,7 @@ $(document).ready(function () {
   $.getJSON("data.json", function (json) {
     data = json["微笑大使"];
 
-    var now = new Date();
-    var currentYear = now.getFullYear().toString();
-    var currentMonth = now.getMonth() + 1;
-
-    let currentQuarter = "Q1";
+    var currentQuarter = "Q1";
     if (currentMonth >= 4 && currentMonth <= 6) currentQuarter = "Q2";
     else if (currentMonth >= 7 && currentMonth <= 9) currentQuarter = "Q3";
     else if (currentMonth >= 10) currentQuarter = "Q4";
@@ -61,13 +61,15 @@ $(document).ready(function () {
     placeholderOption.hide();
 
     $.each(Object.keys(data).sort().reverse(), function (_, year) {
-      $yearSelector.append(`<option value="${year}">${year}</option>`);
+      if(currentYear != year){
+        $yearSelector.append(`<option value="${year}">${year}</option>`);
+      } 
     });
 
     $yearSelector.off("change").on("change", function () {
       var year = $(this).val();
 
-       if (year === "2023" || year === "2024") {
+       if (year === "服務英雄" ) {
           var url = "https://www.hino.com.tw/hinohero";
 
           // 嘗試開新分頁
@@ -92,20 +94,32 @@ $(document).ready(function () {
     var $quarterSelector = $("#seasonSelector");
     $quarterSelector.empty();
 
+    var validQuarters = [];
+
     $.each(quarterMap, function (quarter, months) {
-      var hasData = months.some(month => data[year][month]);
+      var hasData = months.some(month => data[year]?.[month]);
       if (hasData) {
+        validQuarters.push(quarter);
         var isSelected = quarter === preselectQuarter ? "selected" : "";
-        $quarterSelector.append(`<option value="${quarter}" ${isSelected}>${year}年第${quarterNames[quarter]}次微笑大使</option>`);
+        $quarterSelector.append(
+          `<option value="${quarter}" ${isSelected}>${year}年第${quarterNames[quarter]}次微笑大使</option>`
+        );
       }
     });
 
-    updateContent(year, preselectQuarter);
+    var selectedQuarter = validQuarters.includes(preselectQuarter) ? preselectQuarter : validQuarters[0];
 
-      $quarterSelector.off("change").on("change", function () {
+    if (selectedQuarter) {
+      updateContent(year, selectedQuarter);
+    } else {
+      updateContent(year, null);
+    }
+
+    $quarterSelector.off("change").on("change", function () {
       updateContent(year, $(this).val());
     });
   }
+
 
   function updateContent(year, quarter) {
     var nowYear = new Date().getFullYear().toString();
@@ -150,7 +164,8 @@ $(document).ready(function () {
     $("#modal-line").attr("href", person.line || "#");
     $("#modal-fb").attr("href", person.fb || "#");
     $("#modal-phone").attr("href", person.phone || "#");
-
+    $("#modal-intro-name").text(person.name)
+    $("#modal-intro-dept").text(person.dept)
     $("#modal").removeClass("hidden");
   }
 
