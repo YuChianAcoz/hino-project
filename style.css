@@ -329,12 +329,12 @@ footer .footer-menu ul li a{
 }
 .modal-content-info p {
   margin: 8px;
-  font-size: 14px;
+  font-size: 15px;
 }
 .modal-intro{
   position: absolute;
-  right: 42px;
-  top: 100px;
+  right: 24px;
+  top: 24px;
 }
 .modal-content-info .modal-intro h3{
   font-size: 28px;
