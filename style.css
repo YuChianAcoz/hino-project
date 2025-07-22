@@ -317,14 +317,14 @@ footer .footer-menu ul li a{
 .modal-content-info {
   position: relative;
   overflow-y: hidden;
-  max-height: 80vh;
+  max-height: 90vh;
   height: 70%;
   padding: 8px;
   text-align: center;
 }
 
 .modal-content-brief {
-  height: 26vh;
+  height: 15vh;
   overflow-y: auto;
 }
 .modal-content-info h3 {
