@@ -308,7 +308,7 @@ footer .footer-menu ul li a{
   background: white;
   border-radius: 8px;
   width: 500px;
-  max-width: 80%;
+  max-width: 87%;
   max-height: 90vh;
   position: relative;
   display: flex;
@@ -324,7 +324,7 @@ footer .footer-menu ul li a{
 }
 
 .modal-content-brief {
-  height: 20vh;
+  height: 30vh;
   overflow-y: auto;
 }
 .modal-content-info h3 {
