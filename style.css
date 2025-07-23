@@ -277,7 +277,7 @@ footer .footer-menu ul li a{
       font-size: 12px;
   }
   .modal-content-brief {
-    max-height: 30vh;
+    height: 30vh !important;
   }
 }
 
