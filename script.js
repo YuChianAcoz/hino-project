@@ -51,7 +51,7 @@ $(document).ready(function () {
     });
   });
 
-  function populateYearSelector(selectedYear) {
+  function populateYearSelector1(selectedYear) {
     var $yearSelector = $("#yearSelector");
     $yearSelector.empty();
 
@@ -89,6 +89,42 @@ $(document).ready(function () {
       this.selectedIndex = 0;
     });
   }
+
+  function populateYearSelector(selectedYear) {
+    const $menu = $("#customSelectorMenu");
+    $menu.empty();
+
+    const years = Object.keys(data).sort().reverse();
+
+    years.forEach(year => {
+      if (year === currentYear) return;
+
+      const $li = $("<li></li>").text(year).on("click", function () {
+        populateQuarterSelector(year);
+        $menu.hide();
+      });
+      $menu.append($li);
+    });
+
+  // 加上特別選項：服務英雄
+  const $hero = $("<li></li>").text("服務英雄").on("click", function () {
+    const url = "https://www.hino.com.tw/hinohero";
+    window.open(url, "_blank");
+    $("#customSelectorBtn").text("歷屆得獎者 ▼");
+    $menu.hide();
+  });
+
+  $menu.append($hero);
+}
+
+$("#customSelectorBtn").on("click", function (e) {
+  e.stopPropagation();
+  $("#customSelectorMenu").toggle();
+});
+
+$(document).on("click", function () {
+  $("#customSelectorMenu").hide();
+});
 
   function populateQuarterSelector(year, preselectQuarter = "Q1") {
     var $quarterSelector = $("#seasonSelector");
