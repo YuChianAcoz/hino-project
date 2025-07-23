@@ -276,6 +276,9 @@ footer .footer-menu ul li a{
       width: 100%;
       font-size: 12px;
   }
+  .modal-content-brief {
+    max-height: 30vh;
+  }
 }
 
 /* Modal-Card */
