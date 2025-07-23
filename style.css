@@ -12,7 +12,7 @@ html, body {
 :root {
   --background-color: #002437;
   --hover-color: #f4d046;
-  --text-color: #fffff;
+  --text-color: #ffffff;
   --breadcrumb-main-color: #595757;
   --red-color: #d71523;
 }
@@ -64,11 +64,25 @@ header {
   line-height: 1.2;
   vertical-align: middle;
 }
+.year-selector::after {
+  content: '';
+  display: inline-block;
+  margin-left: 12px;
+  vertical-align: middle;
+  border-top: 5px solid var(--text-color);
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+}
+
 .year-selector:focus {
   outline: none;
   box-shadow: none;
   color: var(--hover-color);
   font-weight: 600;
+}
+
+.year-selector:focus::after {
+    border-top: 5px solid var(--hover-color);
 }
 .year-selector option {
   text-align: center;
@@ -83,7 +97,6 @@ header {
 
 .custom-dropdown {
   position: absolute;
-  background: white;
   color: #000;
   list-style: none;
   padding: 0;
@@ -98,10 +111,12 @@ header {
 .custom-dropdown li {
   padding: 8px 12px;
   cursor: pointer;
+  background-color: var(--background-color);
+  color: #ffffff;
 }
 
 .custom-dropdown li:hover {
-  background-color: #eee;
+  color: var(--hover-color);
 }
 
 .header-banner {
@@ -300,9 +315,9 @@ footer .footer-menu ul li a{
       width: 100%;
       font-size: 12px;
   }
-  .modal-content-brief {
+  /* .modal-content-brief {
     height: 30vh !important;
-  }
+  } */
 }
 
 /* Modal-Card */
@@ -332,7 +347,7 @@ footer .footer-menu ul li a{
 .modal.hidden {
   display: none;
 }
-.modal-content {
+ .modal-content {
   background: white;
   border-radius: 8px;
   width: 500px;
@@ -407,7 +422,7 @@ footer .footer-menu ul li a{
   background-repeat: no-repeat;
   background-position: center;
   cursor: pointer;
-}
+} 
 .icon-btn:hover {
   transform: scale(1.1);
 }
