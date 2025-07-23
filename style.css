@@ -80,6 +80,30 @@ header {
 .select-wrapper:has(.year-selector:focus)::after {
   color: var(--hover-color);
 }
+
+.custom-dropdown {
+  position: absolute;
+  background: white;
+  color: #000;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #ccc;
+  width: 160px;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 999;
+}
+
+.custom-dropdown li {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.custom-dropdown li:hover {
+  background-color: #eee;
+}
+
 .header-banner {
   display: block;
   max-width: 1048px;
