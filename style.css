@@ -52,7 +52,6 @@ header {
   color: var(--red-color);
 }
 .year-selector {
-  padding-right: 20px;
   background-color: var(--background-color);
   color: var(--text-color);
   border: none;
