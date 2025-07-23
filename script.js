@@ -51,45 +51,6 @@ $(document).ready(function () {
     });
   });
 
-  function populateYearSelector1(selectedYear) {
-    var $yearSelector = $("#yearSelector");
-    $yearSelector.empty();
-
-    var placeholderOption = $('<option value="" disabled selected class="placeholder-option">歷屆得獎者</option>');
-    $yearSelector.append(placeholderOption);
-
-    placeholderOption.hide();
-
-    $.each(Object.keys(data).sort().reverse(), function (_, year) {
-      if(currentYear != year){
-        $yearSelector.append(`<option value="${year}">${year}</option>`);
-      } 
-    });
-
-    $yearSelector.off("change").on("change", function () {
-      var year = $(this).val();
-
-       if (year === "服務英雄" ) {
-          var url = "https://www.hino.com.tw/hinohero";
-
-          // 嘗試開新分頁
-          var newWindow = window.open(url, "_blank");
-
-          // 如果被阻擋或未成功開啟，就直接導向
-          if (!newWindow || newWindow.closed || typeof newWindow.closed === "undefined") {
-            window.location.href = url;
-          }
-
-          // 重置下拉選單狀態
-          $(this).prop('selectedIndex', 0);
-          return;
-        }
-
-      populateQuarterSelector(year);
-      this.selectedIndex = 0;
-    });
-  }
-
   function populateYearSelector(selectedYear) {
     const $menu = $("#customSelectorMenu");
     $menu.empty();
@@ -110,7 +71,6 @@ $(document).ready(function () {
   const $hero = $("<li></li>").text("服務英雄").on("click", function () {
     const url = "https://www.hino.com.tw/hinohero";
     window.open(url, "_blank");
-    $("#customSelectorBtn").text("歷屆得獎者 ▼");
     $menu.hide();
   });
 
