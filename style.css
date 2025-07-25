@@ -12,7 +12,7 @@ html, body {
 :root {
   --background-color: #002437;
   --hover-color: #f4d046;
-  --text-color: #ffffff;
+  --text-color: #fffff;
   --breadcrumb-main-color: #595757;
   --red-color: #d71523;
 }
@@ -52,6 +52,7 @@ header {
   color: var(--red-color);
 }
 .year-selector {
+  padding-right: 20px;
   background-color: var(--background-color);
   color: var(--text-color);
   border: none;
@@ -63,25 +64,11 @@ header {
   line-height: 1.2;
   vertical-align: middle;
 }
-.year-selector::after {
-  content: '';
-  display: inline-block;
-  margin-left: 12px;
-  vertical-align: middle;
-  border-top: 5px solid var(--text-color);
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-}
-
 .year-selector:focus {
   outline: none;
   box-shadow: none;
   color: var(--hover-color);
   font-weight: 600;
-}
-
-.year-selector:focus::after {
-    border-top: 5px solid var(--hover-color);
 }
 .year-selector option {
   text-align: center;
@@ -96,13 +83,13 @@ header {
 
 .custom-dropdown {
   position: absolute;
+  top : 40px;
   color: #000;
   list-style: none;
   padding: 0;
   margin: 0;
-  border: 1px solid #ccc;
   width: 160px;
-  max-height: 300px;
+  max-height: 400px;
   overflow-y: auto;
   z-index: 999;
 }
@@ -111,11 +98,11 @@ header {
   padding: 8px 12px;
   cursor: pointer;
   background-color: var(--background-color);
-  color: #ffffff;
+  color: #fff;
 }
 
 .custom-dropdown li:hover {
-  color: var(--hover-color);
+  background-color: #eee;
 }
 
 .header-banner {
@@ -346,7 +333,7 @@ footer .footer-menu ul li a{
 .modal.hidden {
   display: none;
 }
- .modal-content {
+.modal-content {
   background: white;
   border-radius: 8px;
   width: 500px;
@@ -356,6 +343,8 @@ footer .footer-menu ul li a{
   display: flex;
   flex-direction: column;
 }
+
+
 .modal-content-info {
   position: relative;
   overflow-y: hidden;
@@ -365,6 +354,10 @@ footer .footer-menu ul li a{
   text-align: center;
 }
 
+.modal-photo {
+  position: relative;
+}
+
 .modal-content-brief {
   height: 15vh;
   overflow-y: auto;
@@ -372,7 +365,7 @@ footer .footer-menu ul li a{
 .modal-content-info h3 {
   color: var(--red-color);
   margin: 0px;
-  font-size: 16px;
+  font-size: 17px;
 }
 .modal-content-info p {
   margin: 8px;
@@ -398,6 +391,8 @@ footer .footer-menu ul li a{
 .modal-content img {
   width: 100%;
   border-radius: 10px;
+  object-fit: contain;
+  display: block;
 }
 .modal-footer {
   border-radius: 0px 0px 10px 10px;
@@ -421,7 +416,7 @@ footer .footer-menu ul li a{
   background-repeat: no-repeat;
   background-position: center;
   cursor: pointer;
-} 
+}
 .icon-btn:hover {
   transform: scale(1.1);
 }
@@ -433,4 +428,40 @@ footer .footer-menu ul li a{
 }
 .icon-btn.phone {
   background-image: url('assets/phone.png');
+}
+
+
+@media screen and (min-width: 769px) {
+  .modal-content{
+    width: 800px;
+  }
+  .modal-content-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    padding: 8px;
+  }
+  
+  .modal-photo{
+    width: 60%;
+  }
+
+  .modal-content-info .modal-intro .modal-intro-dept {
+    width: 70px;
+  }
+  
+  .modal-content-brief {
+    width: 40%;
+    height: auto;
+    max-height: 385px;
+  }
+
+  .modal-content-info h3{
+    font-size: 19px;
+  }
+
+  .modal-content-info p{
+    font-size: 17px;
+  }
 }
