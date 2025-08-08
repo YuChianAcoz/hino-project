@@ -80,7 +80,9 @@ header {
 .select-wrapper:has(.year-selector:focus)::after {
   color: var(--hover-color);
 }
-
+.year-selector span{
+  margin-left: 10px;
+}
 .custom-dropdown {
   position: absolute;
   top : 40px;
