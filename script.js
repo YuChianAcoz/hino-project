@@ -52,30 +52,34 @@ $(document).ready(function () {
   });
 
   function populateYearSelector(selectedYear) {
-    const $menu = $("#customSelectorMenu");
-    $menu.empty();
-
-    const years = Object.keys(data).sort().reverse();
+    var $menu = $("#customSelectorMenu").empty();
+    var years = Object.keys(data).sort().reverse();
 
     years.forEach(year => {
       if (year === currentYear) return;
+      
+      var safeYear = /^\d{4}$/.test(String(year)) ? String(year) : null;
+      if (!safeYear) return;
 
-      const $li = $("<li></li>").text(year).on("click", function () {
-        populateQuarterSelector(year);
+      var $li = $("<li>").text(safeYear).on("click", () => {
+        populateQuarterSelector(safeYear);
         $menu.hide();
       });
+
       $menu.append($li);
-    });
+  });
 
   // 加上特別選項：服務英雄
-  const $hero = $("<li></li>").text("服務英雄").on("click", function () {
-    const url = "https://www.hino.com.tw/hinohero";
-    window.open(url, "_blank");
-    $menu.hide();
-  });
+  const $hero = $("<li>")
+    .text("服務英雄")
+    .on("click", () => {
+      window.open("https://www.hino.com.tw/hinohero", "_blank", "noopener,noreferrer");
+      $menu.hide();
+    });
 
   $menu.append($hero);
 }
+
 
 $("#customSelectorBtn").on("click", function (e) {
   e.stopPropagation();
@@ -87,19 +91,21 @@ $(document).on("click", function () {
 });
 
   function populateQuarterSelector(year, preselectQuarter = "Q1") {
-    var $quarterSelector = $("#seasonSelector");
-    $quarterSelector.empty();
-
+    var $quarterSelector = $("#seasonSelector").empty();
     var validQuarters = [];
-
+    var safeYear = /^\d{4}$/.test(String(year)) ? String(year) : "";
+    
     $.each(quarterMap, function (quarter, months) {
       var hasData = months.some(month => data[year]?.[month]);
       if (hasData) {
         validQuarters.push(quarter);
-        var isSelected = quarter === preselectQuarter ? "selected" : "";
-        $quarterSelector.append(
-          `<option value="${quarter}" ${isSelected}>${year}年第${quarterNames[quarter]}次微笑大使</option>`
-        );
+        
+        var $opt = $("<option>").val(quarter).text(`${safeYear}年第${quarterNames[quarter]}次微笑大使`);
+
+        if (quarter === preselectQuarter) {
+          $opt.prop("selected", true);
+        }
+        $quarterSelector.append($opt);
       }
     });
 
@@ -116,41 +122,68 @@ $(document).on("click", function () {
     });
   }
 
-
-  function updateContent(year, quarter) {
-    var nowYear = new Date().getFullYear().toString();
-    var $breadcrumb = $("#breadcrumb");
-    var $grid = $("#ambassadorGrid");
-
-    if (year === nowYear) {
-      $breadcrumb.html(`微笑大使 › <span class="highlight">當年度得獎者</span>`);
-    }
-    else {
-      $breadcrumb.html(`微笑大使 › <span class="highlight">當年度得獎者 › ${year}</span>`);
-    }
-
-    $grid.empty();
-
-    var months = quarterMap[quarter];
-    months.forEach(month => {
-      var list = data[year][month] || [];
-      list.forEach(person => {
-        var $card = $("<div class='card'></div>").html(`
-          <img src="${person.photo}" alt="${person.name}" />
-          <div class="info-row">
-            <div class="name">${person.name}</div>
-            <div class="dept">${person.dept}</div>
-          </div>
-        `);
-
-        $card.on("click", function () {
-          openModal(person);
-        });
-
-        $grid.append($card);
-      });
-    });
+// 只允許相對資源或 https，避免 javascript: 等惡意 scheme
+function safeUrl(u) {
+  try {
+    if (!u) return "";
+    // 允許本地 assets/ 或相對路徑
+    if (/^(?:\.{0,2}\/|assets\/)/.test(u)) return u;
+    var url = new URL(u, location.origin);
+    return url.protocol === "https:" ? url.href : "";
+  } catch {
+    return "";
   }
+}
+
+function updateContent(year, quarter) {
+  var nowYear = new Date().getFullYear().toString();
+  var $breadcrumb = $("#breadcrumb").empty();
+  var $grid = $("#ambassadorGrid").empty();
+  var $prefix = $(document.createTextNode("微笑大使 › "));
+  var $hl = $("<span>").addClass("highlight");
+  
+  if (year === nowYear) {
+    $hl.text("當年度得獎者");
+  } else {
+    var safeYear = /^\d{4}$/.test(String(year)) ? String(year) : String(year || "");
+    $hl.text(`當年度得獎者 › ${safeYear}`);
+  }
+  
+  $breadcrumb.append($prefix).append($hl);
+
+  var months = quarterMap[quarter] || [];
+  var rendered = 0;
+
+  months.forEach(month => {
+    var list = (data[year] && data[year][month]) ? data[year][month] : [];
+    list.forEach(person => {
+      var $card = $("<div>").addClass("card");
+      var $img = $("<img>");
+      var photo = safeUrl(person.photo);
+      
+      if (photo) $img.attr("src", photo);
+      $img.attr("alt", person.name || "");
+      $card.append($img);
+
+      var $infoRow = $("<div>").addClass("info-row");
+      var $name = $("<div>").addClass("name").text(person.name || "");
+      var $dept = $("<div>").addClass("dept").text(person.dept || "");
+      $infoRow.append($name, $dept);
+      $card.append($infoRow);
+
+      $card.on("click", function () {
+        openModal(person);
+      });
+
+      $grid.append($card);
+      rendered++;
+    });
+  });
+
+  if (rendered === 0) {
+    $grid.append($("<div>").addClass("empty").text("目前沒有資料"));
+  }
+}
 
   function openModal(person) {
     $("#modal-photo").attr("src", person.photo);
