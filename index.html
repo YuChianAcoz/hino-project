@@ -1,21 +1,24 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <script>
-      (function () {
-        if (window.top !== window.self) {
-          document.documentElement.style.display = 'none';
-          try {
-            window.top.location = window.self.location;
-          } catch (e) {
-            window.location.replace('/');
-          }
-        }
-      })();
-    </script>
-  
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Security-Policy" content="frame-ancestors 'self' https://www.hino.com.tw">
+
+  <script>
+    (function () {
+      if (window.top !== window.self) {
+        document.documentElement.style.display = 'none';
+        try {
+          var safeUrl = location.origin + location.pathname;
+          window.top.location = safeUrl;
+        } catch (e) {
+          location.replace('/');
+        }
+      }
+    })();
+  </script>
+  
   <meta property="og:title" content="HINO 商用車微笑大使" />
   <meta property="og:image" content="https://www.hino.com.tw/smilehino/assets/webPic.png" />
   <meta property="og:description" content="熱情服務由您來選!一同為最親切、熱情的HINO服務夥伴喝采" />
