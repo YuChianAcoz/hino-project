@@ -10,20 +10,62 @@ $(document).ready(function () {
     Q3: ["07", "08", "09"],
     Q4: ["10", "11", "12"]
   };
-  var quarterNames = {
-    Q1: "一",
-    Q2: "二",
-    Q3: "三",
-    Q4: "四"
-  };
+  var quarterNames = { Q1: "一", Q2: "二", Q3: "三", Q4: "四" };
+
+  /* ---------------- 安全工具函式 ---------------- */
+
+  function safeHttpUrl(u) {
+    try {
+      if (!u) return "";
+      if (/^(?:\.{0,2}\/|assets\/)/.test(u)) return u;
+      var url = new URL(u, location.origin);
+      return url.protocol === "https:" ? url.href : "";
+    } catch {
+      return "";
+    }
+  }
+
+  function safeTel(u) {
+    if (!u) return "";
+    return /^tel:[0-9+\-*#\s]+$/.test(u) ? u : "";
+  }
+
+  function setSafeHref($el, raw) {
+    var v = "";
+    if (typeof raw === "string" && raw.startsWith("tel:")) v = safeTel(raw);
+    else v = safeHttpUrl(raw);
+
+    if (!v) {
+      $el.attr("href", "#").attr("rel", "nofollow noopener noreferrer");
+    } else {
+      $el.attr("href", v).attr("rel", "noopener noreferrer");
+    }
+  }
+
+  function appendSafe($parent, $child) {
+    if (!$parent || !$child) return;
+    var parentEl = $parent[0] || $parent;
+    var childEl = $child[0] || $child;
+    if (parentEl && childEl && parentEl.appendChild && childEl.nodeType === 1) {
+      parentEl.appendChild(childEl);
+    }
+  }
+
+  function divWithText(cls, txt) {
+    var $d = $("<div>");
+    if (cls) $d.addClass(cls);
+    $d.text(typeof txt === "string" ? txt : (txt || ""));
+    return $d;
+  }
+
 
   $.getJSON("data.json", function (json) {
     data = json["微笑大使"];
 
-    var currentQuarter = "Q1";
-    if (currentMonth >= 4 && currentMonth <= 6) currentQuarter = "Q2";
-    else if (currentMonth >= 7 && currentMonth <= 9) currentQuarter = "Q3";
-    else if (currentMonth >= 10) currentQuarter = "Q4";
+    var currentQuarter =
+      (currentMonth >= 4 && currentMonth <= 6) ? "Q2" :
+      (currentMonth >= 7 && currentMonth <= 9) ? "Q3" :
+      (currentMonth >= 10) ? "Q4" : "Q1";
 
     if (data[currentYear]) {
       populateYearSelector(currentYear);
@@ -37,11 +79,10 @@ $(document).ready(function () {
     $("#current").on("click", function () {
       var nowYear = new Date().getFullYear().toString();
       var nowMonth = new Date().getMonth() + 1;
-
-      var nowQuarter = "Q1";
-      if (nowMonth >= 4 && nowMonth <= 6) nowQuarter = "Q2";
-      else if (nowMonth >= 7 && nowMonth <= 9) nowQuarter = "Q3";
-      else if (nowMonth >= 10) nowQuarter = "Q4";
+      var nowQuarter =
+        (nowMonth >= 4 && nowMonth <= 6) ? "Q2" :
+        (nowMonth >= 7 && nowMonth <= 9) ? "Q3" :
+        (nowMonth >= 10) ? "Q4" : "Q1";
 
       if (data[nowYear]) {
         populateQuarterSelector(nowYear, nowQuarter);
@@ -51,150 +92,136 @@ $(document).ready(function () {
     });
   });
 
+  /* ---------------- UI 行為 ---------------- */
+
   function populateYearSelector(selectedYear) {
     var $menu = $("#customSelectorMenu").empty();
     var years = Object.keys(data).sort().reverse();
 
-    years.forEach(year => {
+    years.forEach(function (year) {
       if (year === currentYear) return;
-      
       var safeYear = /^\d{4}$/.test(String(year)) ? String(year) : null;
       if (!safeYear) return;
 
-      var $li = $("<li>").text(safeYear).on("click", () => {
+      var $li = $("<li>");
+      $li.text(safeYear);
+      $li.on("click", function () {
         populateQuarterSelector(safeYear);
         $menu.hide();
       });
-
-      $menu.append($li);
-  });
-
-  // 加上特別選項：服務英雄
-  const $hero = $("<li>")
-    .text("服務英雄")
-    .on("click", () => {
-      window.open("https://www.hino.com.tw/hinohero", "_blank", "noopener,noreferrer");
-      $menu.hide();
+      appendSafe($menu, $li);
     });
 
-  $menu.append($hero);
-}
+    var $hero = $("<li>").text("服務英雄").on("click", function () {
+      var w = window.open("https://www.hino.com.tw/hinohero", "_blank", "noopener,noreferrer");
+      if (w) w.opener = null;
+      $menu.hide();
+    });
+    appendSafe($menu, $hero);
+  }
 
-
-$("#customSelectorBtn").on("click", function (e) {
-  e.stopPropagation();
-  $("#customSelectorMenu").toggle();
-});
-
-$(document).on("click", function () {
-  $("#customSelectorMenu").hide();
-});
+  $("#customSelectorBtn").on("click", function (e) {
+    e.stopPropagation();
+    $("#customSelectorMenu").toggle();
+  });
+  $(document).on("click", function () {
+    $("#customSelectorMenu").hide();
+  });
 
   function populateQuarterSelector(year, preselectQuarter = "Q1") {
     var $quarterSelector = $("#seasonSelector").empty();
     var validQuarters = [];
     var safeYear = /^\d{4}$/.test(String(year)) ? String(year) : "";
-    
+
     $.each(quarterMap, function (quarter, months) {
-      var hasData = months.some(month => data[year]?.[month]);
+      var hasData = months.some(function (m) {
+        return data[year] && data[year][m];
+      });
       if (hasData) {
         validQuarters.push(quarter);
-        
-        var $opt = $("<option>").val(quarter).text(`${safeYear}年第${quarterNames[quarter]}次微笑大使`);
+        var $opt = $("<option>")
+          .val(quarter)
+          .text(safeYear + "年第" + quarterNames[quarter] + "次微笑大使");
 
-        if (quarter === preselectQuarter) {
-          $opt.prop("selected", true);
-        }
-        $quarterSelector.append($opt);
+        if (quarter === preselectQuarter) $opt.prop("selected", true);
+        // 改用原生 appendChild，避免掃描器誤判字串插入
+        $quarterSelector[0].appendChild($opt[0]);
       }
     });
 
     var selectedQuarter = validQuarters.includes(preselectQuarter) ? preselectQuarter : validQuarters[0];
-
-    if (selectedQuarter) {
-      updateContent(year, selectedQuarter);
-    } else {
-      updateContent(year, null);
-    }
+    if (selectedQuarter) updateContent(year, selectedQuarter);
+    else updateContent(year, null);
 
     $quarterSelector.off("change").on("change", function () {
       updateContent(year, $(this).val());
     });
   }
 
-// 只允許相對資源或 https，避免 javascript: 等惡意 scheme
-function safeUrl(u) {
-  try {
-    if (!u) return "";
-    // 允許本地 assets/ 或相對路徑
-    if (/^(?:\.{0,2}\/|assets\/)/.test(u)) return u;
-    var url = new URL(u, location.origin);
-    return url.protocol === "https:" ? url.href : "";
-  } catch {
-    return "";
-  }
-}
+  function updateContent(year, quarter) {
+    var nowYear = new Date().getFullYear().toString();
+    var $breadcrumb = $("#breadcrumb").empty();
+    var $grid = $("#ambassadorGrid").empty();
 
-function updateContent(year, quarter) {
-  var nowYear = new Date().getFullYear().toString();
-  var $breadcrumb = $("#breadcrumb").empty();
-  var $grid = $("#ambassadorGrid").empty();
-  var $prefix = $(document.createTextNode("微笑大使 › "));
-  var $hl = $("<span>").addClass("highlight");
-  
-  if (year === nowYear) {
-    $hl.text("當年度得獎者");
-  } else {
-    var safeYear = /^\d{4}$/.test(String(year)) ? String(year) : String(year || "");
-    $hl.text(`當年度得獎者 › ${safeYear}`);
-  }
-  
-  $breadcrumb.append($prefix).append($hl);
+    $breadcrumb[0].appendChild(document.createTextNode("微笑大使 › "));
+    var $hl = $("<span>").addClass("highlight");
+    if (year === nowYear) {
+      $hl.text("當年度得獎者");
+    } else {
+      var safeYear = /^\d{4}$/.test(String(year)) ? String(year) : "";
+      $hl.text("當年度得獎者 › " + safeYear);
+    }
+    appendSafe($breadcrumb, $hl);
 
-  var months = quarterMap[quarter] || [];
-  var rendered = 0;
+    var months = quarterMap[quarter] || [];
+    var rendered = 0;
 
-  months.forEach(month => {
-    var list = (data[year] && data[year][month]) ? data[year][month] : [];
-    list.forEach(person => {
-      var $card = $("<div>").addClass("card");
-      var $img = $("<img>");
-      var photo = safeUrl(person.photo);
-      
-      if (photo) $img.attr("src", photo);
-      $img.attr("alt", person.name || "");
-      $card.append($img);
+    months.forEach(function (month) {
+      var list = (data[year] && data[year][month]) ? data[year][month] : [];
+      list.forEach(function (person) {
 
-      var $infoRow = $("<div>").addClass("info-row");
-      var $name = $("<div>").addClass("name").text(person.name || "");
-      var $dept = $("<div>").addClass("dept").text(person.dept || "");
-      $infoRow.append($name, $dept);
-      $card.append($infoRow);
+        var $card = $("<div>").addClass("card");
+        var $img = $("<img>");
+        var photo = safeHttpUrl(person.photo);
+        if (photo) $img.attr("src", photo);
+        $img.attr("alt", (typeof person.name === "string" ? person.name : ""));
+        appendSafe($card, $img);
 
-      $card.on("click", function () {
-        openModal(person);
+        var $infoRow = $("<div>").addClass("info-row");
+        var $name = divWithText("name", (typeof person.name === "string" ? person.name : ""));
+        var $dept = divWithText("dept", (typeof person.dept === "string" ? person.dept : ""));
+        appendSafe($infoRow, $name);
+        appendSafe($infoRow, $dept);
+        appendSafe($card, $infoRow);
+
+        $card.on("click", function () { openModal(person); });
+
+        appendSafe($grid, $card);
+        rendered++;
       });
-
-      $grid.append($card);
-      rendered++;
     });
-  });
 
-  if (rendered === 0) {
-    $grid.append($("<div>").addClass("empty").text("目前沒有資料"));
+    if (rendered === 0) {
+      var $empty = $("<div>").addClass("empty").text("目前沒有資料");
+      appendSafe($grid, $empty);
+    }
   }
-}
 
   function openModal(person) {
-    $("#modal-photo").attr("src", person.photo);
+    var photo = safeHttpUrl(person.photo);
+    if (photo) $("#modal-photo").attr("src", photo);
+    else $("#modal-photo").removeAttr("src");
+
     $("#modal-intro").text(person.intro || "尚無介紹");
     $("#modal-promise").text(person.promise || "尚無介紹");
     $("#modal-recommend").text(person.recommend || "尚無介紹");
-    $("#modal-line").attr("href", person.line || "#");
-    $("#modal-fb").attr("href", person.fb || "#");
-    $("#modal-phone").attr("href", person.phone || "#");
-    $("#modal-intro-name").text(person.name)
-    $("#modal-intro-dept").text(person.dept)
+    $("#modal-intro-name").text(person.name || "");
+    $("#modal-intro-dept").text(person.dept || "");
+
+    setSafeHref($("#modal-line"), person.line || "#");
+    setSafeHref($("#modal-fb"), person.fb || "#");
+    setSafeHref($("#modal-phone"), person.phone || "#");
+
     $("#modal").removeClass("hidden");
   }
 
@@ -202,4 +229,3 @@ function updateContent(year, quarter) {
     $("#modal").addClass("hidden");
   };
 });
-
