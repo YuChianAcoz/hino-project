@@ -58,6 +58,12 @@ $(document).ready(function () {
     return $d;
   }
 
+  function isSafeYear(y) {
+    return typeof y === "string" && /^\d{4}$/.test(y);
+  }
+  function isSafeQuarter(q) {
+    return q === "Q1" || q === "Q2" || q === "Q3" || q === "Q4";
+  }
 
   $.getJSON("data.json", function (json) {
     data = json["微笑大使"];
@@ -130,22 +136,34 @@ $(document).ready(function () {
 
   function populateQuarterSelector(year, preselectQuarter = "Q1") {
     var $quarterSelector = $("#seasonSelector").empty();
+    var selectEl = $quarterSelector[0];
     var validQuarters = [];
-    var safeYear = /^\d{4}$/.test(String(year)) ? String(year) : "";
+    var safeYear = isSafeYear(String(year)) ? String(year) : "";
+
+    if (!isSafeQuarter(preselectQuarter)) preselectQuarter = "Q1";
 
     $.each(quarterMap, function (quarter, months) {
+      if (!isSafeQuarter(quarter)) return;
+
       var hasData = months.some(function (m) {
         return data[year] && data[year][m];
       });
+
       if (hasData) {
         validQuarters.push(quarter);
-        var $opt = $("<option>")
-          .val(quarter)
-          .text(safeYear + "年第" + quarterNames[quarter] + "次微笑大使");
 
-        if (quarter === preselectQuarter) $opt.prop("selected", true);
-        // 改用原生 appendChild，避免掃描器誤判字串插入
-        $quarterSelector[0].appendChild($opt[0]);
+        var opt = document.createElement("option");
+        opt.value = quarter; // value 取自白名單 quarter
+        var label = (safeYear ? safeYear : "") + "年第" + quarterNames[quarter] + "次微笑大使";
+        opt.textContent = label;
+
+        if (quarter === preselectQuarter) opt.selected = true;
+
+        if (typeof selectEl.add === "function") {
+          selectEl.add(opt);
+        } else {
+          selectEl.appendChild(opt);
+        }
       }
     });
 
@@ -154,10 +172,13 @@ $(document).ready(function () {
     else updateContent(year, null);
 
     $quarterSelector.off("change").on("change", function () {
-      updateContent(year, $(this).val());
+      var v = $(this).val();
+      if (isSafeQuarter(v)) {
+        updateContent(year, v);
+      }
     });
   }
-
+  
   function updateContent(year, quarter) {
     var nowYear = new Date().getFullYear().toString();
     var $breadcrumb = $("#breadcrumb").empty();
