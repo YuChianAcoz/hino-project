@@ -90,9 +90,10 @@ $(document).ready(function () {
         (nowMonth >= 7 && nowMonth <= 9) ? "Q3" :
         (nowMonth >= 10) ? "Q4" : "Q1";
 
-      log.console(nowYear);
-      log.console(nowMonth);
-      log.console(nowQuarter);
+      console.log(nowYear);
+      console.log(nowMonth);
+      console.log(nowQuarter);
+      
       if (data[nowYear]) {
         populateQuarterSelector(nowYear, nowQuarter);
       } else {
