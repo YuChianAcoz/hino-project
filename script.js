@@ -72,7 +72,12 @@ $(document).ready(function () {
       (currentMonth >= 4 && currentMonth <= 6) ? "Q2" :
       (currentMonth >= 7 && currentMonth <= 9) ? "Q3" :
       (currentMonth >= 10) ? "Q4" : "Q1";
-
+    
+    console.log(currentYear);
+    console.log(currentQuarter);
+    console.log(currentMonth);
+    
+    
     if (data[currentYear]) {
       populateYearSelector(currentYear);
       populateQuarterSelector(currentYear, currentQuarter);
@@ -134,13 +139,13 @@ $(document).ready(function () {
     $("#customSelectorMenu").hide();
   });
 
-  function populateQuarterSelector(year, preselectQuarter = "Q2") {
+  function populateQuarterSelector(year, preselectQuarter = "Q1") {
     var $quarterSelector = $("#seasonSelector").empty();
     var selectEl = $quarterSelector[0];
     var validQuarters = [];
     var safeYear = isSafeYear(String(year)) ? String(year) : "";
 
-    if (!isSafeQuarter(preselectQuarter)) preselectQuarter = "Q2";
+    if (!isSafeQuarter(preselectQuarter)) preselectQuarter = "Q1";
 
     $.each(quarterMap, function (quarter, months) {
       if (!isSafeQuarter(quarter)) return;
