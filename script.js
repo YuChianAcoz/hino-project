@@ -73,11 +73,6 @@ $(document).ready(function () {
       (currentMonth >= 7 && currentMonth <= 9) ? "Q3" :
       (currentMonth >= 10) ? "Q4" : "Q1";
     
-    console.log(currentYear);
-    console.log(currentQuarter);
-    console.log(currentMonth);
-    
-    
     if (data[currentYear]) {
       populateYearSelector(currentYear);
       populateQuarterSelector(currentYear, currentQuarter);
@@ -159,7 +154,12 @@ $(document).ready(function () {
 
         var opt = document.createElement("option");
         opt.value = quarter; // value 取自白名單 quarter
-        var label = (safeYear ? safeYear : "") + "年第" + quarterNames[quarter] + "次微笑大使";
+        var quarterText = quarterNames[quarter];
+
+        console.log(year);
+         console.log(quarter);
+        
+        var label = (safeYear ? safeYear : "") + "年第" + quarterText + "次微笑大使";
         opt.textContent = label;
 
         if (quarter === preselectQuarter) opt.selected = true;
