@@ -156,8 +156,9 @@ $(document).ready(function () {
         opt.value = quarter; // value 取自白名單 quarter
         var quarterText = quarterNames[quarter];
 
-        console.log(year);
-         console.log(quarter);
+        if(year == 2025 && quarter == "Q4"){
+          quarterText = "二";
+        }
         
         var label = (safeYear ? safeYear : "") + "年第" + quarterText + "次微笑大使";
         opt.textContent = label;
