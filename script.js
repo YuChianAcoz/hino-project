@@ -196,7 +196,7 @@ $(document).ready(function () {
       $hl.text("當年度得獎者");
     } else {
       var safeYear = /^\d{4}$/.test(String(year)) ? String(year) : "";
-      $hl.text("歷屆得獎者 › " + safeYear);
+      $hl.text("當年度得獎者 › " + safeYear);
     }
     appendSafe($breadcrumb, $hl);
 
