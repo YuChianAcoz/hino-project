@@ -79,7 +79,9 @@ $(document).ready(function () {
     } else {
       var firstYear = Object.keys(data).sort().reverse()[0];
       populateYearSelector(firstYear);
-      populateQuarterSelector(firstYear, "Q1");
+
+      //toDo: 因需求不按照正常季度，此處需看情況修改
+      populateQuarterSelector(firstYear, "Q3");
     }
 
     $("#current").on("click", function () {
@@ -153,12 +155,8 @@ $(document).ready(function () {
         validQuarters.push(quarter);
 
         var opt = document.createElement("option");
-        opt.value = quarter; // value 取自白名單 quarter
+        opt.value = quarter;
         var quarterText = quarterNames[quarter];
-
-        //if(year == 2025 && quarter == "Q4"){
-          //quarterText = "二";
-        //}
         
         var label = (safeYear ? safeYear : "") + "年第" + quarterText + "次微笑大使";
         opt.textContent = label;
