@@ -112,7 +112,7 @@ $(document).ready(function () {
       if (!safeYear) return;
 
       var $li = $("<li>");
-      $li.text(safeYear);
+      $li.text(safeYear+ " 微笑大使");
       $li.on("click", function () {
         populateQuarterSelector(safeYear);
         $menu.hide();
